@@ -14,9 +14,13 @@ import java.util.List;
 @Service
 public class PmsBrandServiceImpl implements PmsBrandService {
 
-    @Autowired
+
     private PmsBrandMapper brandMapper;
 
+    @Autowired
+    public void setBrandMapper(PmsBrandMapper brandMapper) {
+        this.brandMapper = brandMapper;
+    }
 
     @Override
     public List<PmsBrand> listAllBrand() {

@@ -2,7 +2,9 @@ package com.zenas.mall.mbg;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.Field;
+import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.internal.DefaultCommentGenerator;
 import org.mybatis.generator.internal.util.StringUtility;
 
@@ -13,6 +15,8 @@ import java.util.Properties;
  */
 public class CommentGenerator extends DefaultCommentGenerator {
     public boolean addRemarksComments = false;
+    private static final String EXAMPLE_SUFFIX="Example";
+    private static final String API_MODEL_PROPERTY_FULL_CLASS_NAME="io.swagger.annotations.ApiModelProperty";
 
 
     /**
@@ -32,7 +36,13 @@ public class CommentGenerator extends DefaultCommentGenerator {
         String remarks=introspectedColumn.getRemarks();
         //根据参数和备注信息是否添加备注信息
         if(addRemarksComments && StringUtility.stringHasValue(remarks)){
-            addFieldJavaDoc(field,remarks);
+           // addFieldJavaDoc(field,remarks);
+            //数据库特殊字符需要转义
+            if (remarks.contains("\"")) {
+                remarks=remarks.replace("\"","'");
+            }
+            //给model的字段添加swagger注释
+            field.addJavaDocLine("@ApiModelProperty(value = \""+remarks+"\")");
         }
     }
 
@@ -49,5 +59,14 @@ public class CommentGenerator extends DefaultCommentGenerator {
         }
         addJavadocTag(field,false);
         field.addJavaDocLine("*/");
+    }
+
+    @Override
+    public void addJavaFileComment(CompilationUnit compilationUnit) {
+        super.addJavaFileComment(compilationUnit);
+        //只在Model层添加Swagger的注解
+        if (!compilationUnit.isJavaInterface()&&!compilationUnit.getType().getFullyQualifiedName().contains(EXAMPLE_SUFFIX)){
+            compilationUnit.addImportedType(new FullyQualifiedJavaType(API_MODEL_PROPERTY_FULL_CLASS_NAME));
+        }
     }
 }
