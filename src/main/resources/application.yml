@@ -5,7 +5,27 @@ spring:
     url: jdbc:mysql://localhost:3306/mall?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: root
+  redis:
+    host: localhost #Redis服务器地址
+    database: 0 #Redis数据库默认索引为0
+    port: 6379
+    password:  #默认为空
+    jedis:
+      pool:
+        max-active: 8 #最大连接数
+        max-idle: 8 #连接池的最大空闲连接数
+        min-idle: 0 #连接池的最小空闲连接数
+        max-wait: -1ms #连接池最大阻塞等待时间(使用负值代表没有限制)
+    timeout: 3000ms #连接超时时间
 mybatis:
-  mapper-locations:
+  mapper-locations: #可以多文件 以下是多路径写法
     - classpath:mapper/*.xml
     - classpath*:com/**/mapper/*.xml
+
+# 自定义的redis key
+redis:
+  key:
+    prefix:
+      authCode: "portal:authCode"
+    expire:
+      authCode: 120 #验证码超期时间
