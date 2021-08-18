@@ -29,7 +29,7 @@
                         userId="${jdbc.userId}"
                         password="${jdbc.password}">
             <!--解决mysql驱动升级到8.0后不生成指定数据库代码的问题-->
-            <property name="nullCatalogMeansCurrent" value="true" />
+            <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
 
         <!--这里连接的  targetPackage 连接package
@@ -37,12 +37,33 @@
          -->
         <!--指定生成的model路径-->
         <javaModelGenerator targetPackage="com.zenas.mall.mbg.model" targetProject="src\main\java"/>
-       <!--指定生成的mapper.xml的路径-->
+        <!--指定生成的mapper.xml的路径-->
         <sqlMapGenerator targetPackage="com.zenas.mall.mbg.mapper" targetProject="src\main\resources"/>
         <!--指定生成的mapper接口的路径-->
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.zenas.mall.mbg.mapper" targetProject="src\main\java"/>
         <table tableName="pms_brand">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+        <!--后台用户表-->
+        <table tableName="ums_admin">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <!--后台用户角色表-->
+        <table tableName="ums_role">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <!--后台用户权限表-->
+        <table tableName="ums_permission">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="ums_admin_role_relation">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="ums_role_permission_relation">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="ums_admin_permission_relation">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
 
